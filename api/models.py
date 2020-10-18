@@ -6,6 +6,8 @@ from django.core.validators import MaxValueValidator,MinValueValidator
 class Movie(models.Model):
     title = models.CharField(max_length=32)
     description = models.TextField()
+    image = models.ImageField()
+
 
     def no_of_ratings(self):
         ratings = Rating.objects.filter(movie=self)
@@ -31,9 +33,13 @@ class Rating(models.Model):
         decimal_places=1,
         max_digits=2
     )
-    #stars = models.IntegerField(validators=[MinValueValidator(1.0), MaxValueValidator(10.0)])
     review = models.TextField(blank=True, null=True)
 
     class Meta:
         unique_together = (('user','movie'),)
         index_together = (('user','movie'),)
+
+
+class Episode(models.Model):
+    pass
+
