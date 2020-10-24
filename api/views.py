@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from .serializers import RatingSerializer,MovieSerializer, UserSerializer
-from .models import Movie, Rating
+from .models import Movie, RatingMovie
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
@@ -31,16 +31,16 @@ class MovieViewSet(viewsets.ModelViewSet):
             print('username:', user)
 
             try:
-                rating = Rating.objects.get(user=user.id, movie=movie.id)
+                rating = RatingMovie.objects.get(user=user.id, movie=movie.id)
                 rating.points = points
                 rating.save()
                 serializer = RatingSerializer(rating, many=False)
-                response = {'message': 'Rating Update','result':serializer.data}
+                response = {'message': 'RatingMovie Update','result':serializer.data}
                 return Response(response, status=status.HTTP_200_OK)
             except:
-                rating = Rating.objects.create(user=user,movie=movie, points=points)
+                rating = RatingMovie.objects.create(user=user, movie=movie, points=points)
                 serializer = RatingSerializer(rating, many=False)
-                response = {'message': 'Rating Created', 'result': serializer.data}
+                response = {'message': 'RatingMovie Created', 'result': serializer.data}
                 return Response(response, status=status.HTTP_200_OK)
         else:
             response = {'message': 'You need to provide stars'}
@@ -57,7 +57,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 
 
 class RatingViewSet(viewsets.ModelViewSet):
-    queryset = Rating.objects.all()
+    queryset = RatingMovie.objects.all()
     serializer_class = RatingSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
