@@ -71,15 +71,18 @@ class Manga(models.Model):
 
 class Lista(models.Model):
     name = models.CharField(max_length=60)
-    movies = models.ManyToManyField('Movie', through='ListMovie', related_name='listasmovies', null=True,blank=True)
-    animes = models.ManyToManyField('Anime', through='ListAnime', related_name='listaanimes', null=True,blank=True)
-    book = models.ManyToManyField('Book', through='ListBook', related_name='listabooks', null=True,blank=True)
-    manga = models.ManyToManyField('Manga', through='ListManga', related_name='listamangas', null=True,blank=True)
+    movies = models.ManyToManyField('Movie', through='ListMovie', related_name='movies',blank=True)
+    animes = models.ManyToManyField('Anime', through='ListAnime', related_name='animes',blank=True)
+    books = models.ManyToManyField('Book', through='ListBook', related_name='books',blank=True)
+    mangas = models.ManyToManyField('Manga', through='ListManga', related_name='mangas',blank=True)
+
 
     def __str__(self):
         return self.name
 
-
+    def completmovie(self):
+        queryset = ListMovie.objects.filter(lista=self.pk)
+        return queryset
 
 class ListMovie(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
@@ -88,7 +91,8 @@ class ListMovie(models.Model):
 
     class Meta:
         unique_together = ('movie','lista')
-
+    def __str__(self):
+        return self.lista.name
 
 class ListAnime(models.Model):
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
@@ -97,6 +101,10 @@ class ListAnime(models.Model):
 
     class Meta:
         unique_together = ('anime','lista')
+
+
+    def __str__(self):
+        return self.lista.name
 
 class ListManga(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE)

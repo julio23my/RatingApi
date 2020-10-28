@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
-from .serializers import RatingSerializer,MovieSerializer, UserSerializer
-from .models import Movie, RatingMovie
+from .serializers import RatingSerializer,MovieSerializer, UserSerializer,ListSerializer
+from .models import Movie, RatingMovie,Lista
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
@@ -12,6 +12,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class ListaViewSet(viewsets.ModelViewSet):
+    queryset = Lista.objects.all()
+    serializer_class = ListSerializer
 
 
 class MovieViewSet(viewsets.ModelViewSet):
